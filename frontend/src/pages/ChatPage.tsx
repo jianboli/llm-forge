@@ -1,7 +1,7 @@
 // frontend/src/pages/ChatPage.tsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
-import './ChatPage.css'; // We'll create this CSS file
+import './ChatPage.css'; 
 
 const API_BASE_URL = '/api'; // Using relative path for proxy
 

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import axios from 'axios';
 import './App.css'; // Basic styling
 import ChatPage from './pages/ChatPage';
+import ModelEvalPage from './pages/ModelPage'; // Assuming this is a separate page for model evaluation
 
 // Define API base URL (adjust if needed, esp. for production)
 // When running via docker-compose, frontend requests to /api/ should be proxied by Nginx to the backend service
@@ -32,7 +33,6 @@ function HomePage() {
   );
 }
 
-function ModelsPage() { return <h2>Model Management (Under Construction)</h2>; }
 function FineTunePage() { return <h2>Fine-Tuning (Under Construction)</h2>; }
 function RagPage() { return <h2>RAG Workflows (Under Construction)</h2>; }
 function AgentsPage() { return <h2>Agentic Workflows (Under Construction)</h2>; }
@@ -56,7 +56,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/chat" element={<ChatPage />} />
-            <Route path="/models" element={<ModelsPage />} />
+            <Route path="/models" element={<ModelEvalPage />} />
             <Route path="/finetune" element={<FineTunePage />} />
             <Route path="/rag" element={<RagPage />} />
             <Route path="/agents" element={<AgentsPage />} />
