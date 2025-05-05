@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: llm-forge-backend
+    ports:
+      - "8001:8000" # Expose backend on 8001 to avoid conflict if needed, Nginx will access internally on 8000
+    volumes:
+      - ./backend/app:/app/app # Mount local code for hot-reloading (dev only)
+      - ./data:/app/data # Persistent data volume (will be used more later)
+      - backend_cache:/root/.cache/huggingface # Cache Hugging Face downloads
+    env_file:
+      - .env # Load environment variables
+    # depends_on: # Add dependencies later (db, redis, etc.)
+    #   - db
+    #   - redis
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload # Dev command
+
+  frontend:
+    build: ./frontend
+    container_name: llm-forge-frontend
+    ports:
+      - "80:80" # Expose Nginx port 80 on the host
+    depends_on:
+      - backend # Frontend needs backend for API calls
+
+  # Add db, redis, worker, vector_db services later in Phase 3
+
+volumes:
+  backend_cache:
+  # Add pg_data, vector_store volumes later
