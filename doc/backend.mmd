@@ -1,0 +1,63 @@
+flowchart TB
+  subgraph Kubernetes_Cluster["Kubernetes Cluster (EKS)"]
+  
+    subgraph Workflow_Automation["Ray DAG Workflows"]
+      DAG_Ingest["Ingest → Chunk → Embed"]
+      DAG_Index["Index to Vector DB"]
+      DAG_Eval["Model Evaluation"]
+      DAG_Train["Fine-tuning (Ray Train + HF)"]
+    end
+
+    subgraph Inference["Real-time Inference"]
+      RayServe["Ray Serve (Agent Logic)"]
+      vLLM_A["vLLM - Model A"]
+      vLLM_B["vLLM - Model B"]
+      vLLM_C["vLLM - Model C"]
+      VectorDB["Weaviate (Vector + Graph)"]
+    end
+
+    subgraph Observability
+      Prometheus["Prometheus"]
+      Grafana["Grafana"]
+      DCGM["DCGM Exporter (GPU)"]
+      RayDash["Ray Dashboard"]
+    end
+
+    MLflow["MLflow Tracking + Artifacts"]
+  end
+
+  subgraph AWS_Infra["AWS Services"]
+    S3["S3 Buckets"]
+    IAM["IAM Roles"]
+  end
+
+  Client["User / API Client"] --> RayServe
+  RayServe --> vLLM_A
+  RayServe --> vLLM_B
+  RayServe --> vLLM_C
+  RayServe --> VectorDB
+  VectorDB --> S3
+  vLLM_A --> S3
+  vLLM_B --> S3
+  vLLM_C --> S3
+
+  DAG_Ingest --> DAG_Index --> VectorDB
+  DAG_Eval --> MLflow
+  DAG_Train --> MLflow
+  DAG_Train --> vLLM_A
+  DAG_Train --> vLLM_B
+  DAG_Train --> vLLM_C
+
+  DAG_Ingest --> S3
+  DAG_Eval --> S3
+  DAG_Train --> S3
+  S3 --> MLflow
+  IAM --> Kubernetes_Cluster
+
+  %% Observability wiring
+  DAG_Eval --> Prometheus
+  DAG_Train --> Prometheus
+  RayServe --> Prometheus
+  Prometheus --> Grafana
+  DCGM --> Prometheus
+  RayDash --> Grafana

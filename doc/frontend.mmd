@@ -1,0 +1,48 @@
+flowchart TB
+  subgraph Frontend["Frontend (React + TypeScript)"]
+    AuthUI["Auth UI (Login / Signup)"]
+    ChatUI["Chat Interface (Multi-model)"]
+    AgentBuilder["Agent Builder (Visual)"]
+    EvalUI["Evaluation Dashboard"]
+    FineTuneUI["Fine-tuning Configurator"]
+    DAGUI["Workflow UI (Ray DAGs)"]
+    MonitorUI["Monitoring Dashboard"]
+    ModelRegistry["Model Registry"]
+    AdminPanel["Admin Settings"]
+  end
+
+  subgraph Auth_Layer["Authentication & Identity"]
+    Auth0["Auth0 / AWS Cognito"]
+  end
+
+  subgraph Backend_APIs["API Layer"]
+    API["REST / GraphQL Gateway"]
+  end
+
+  subgraph Backend_Services["Backend Services"]
+    RayAPI["Ray Serve + DAG APIs"]
+    vLLMAPI["vLLM Inference API"]
+    MLflowAPI["MLflow Tracking API"]
+    WeaviateAPI["Weaviate Vector Search"]
+    PrometheusAPI["Prometheus / Grafana APIs"]
+  end
+
+  %% Auth flow
+  AuthUI --> Auth0
+
+  %% UI to API
+  ChatUI --> API
+  AgentBuilder --> API
+  EvalUI --> API
+  FineTuneUI --> API
+  DAGUI --> API
+  MonitorUI --> API
+  ModelRegistry --> API
+  AdminPanel --> API
+
+  %% API to Services
+  API --> RayAPI
+  API --> vLLMAPI
+  API --> MLflowAPI
+  API --> WeaviateAPI
+  API --> PrometheusAPI

@@ -7,11 +7,13 @@ AVAILABLE_MODELS = [
     {
         "id": "google/flan-t5-small",
         "name": "Flan-T5 Small (Google)",
+        "source": "huggingface",
         "pipeline_kwargs": {"max_new_tokens": 100} # Example specific args
     },
     {
         "id": "distilgpt2",
         "name": "DistilGPT-2 (Hugging Face)",
+        "source": "huggingface",
         "pipeline_kwargs": {"max_new_tokens": 50}
     },
     # { # Example for later API integration (requires .env setup)
